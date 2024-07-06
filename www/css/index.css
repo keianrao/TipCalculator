@@ -19,3 +19,33 @@ copyright*/
 html {
     background: cornsilk;
 }
+
+
+.table-wrapper {
+    display: inline-block;
+    max-height: 70vh;
+    overflow-y: scroll;
+}
+#options {
+    table-layout: fixed;
+    margin: 0.4em 0;
+
+    border-spacing: 0;
+    border: 0.05em solid grey;
+    border-radius: 1em;
+}
+#options tr > th, #options tr > td {
+    border-top: 0.05em solid grey;
+    padding: 0.4em 0.6em;
+}
+#options thead tr:first-child * { border-top: none; }
+#options thead tr:first-child *:first-child { border-left: none; }
+#options thead tr:first-child *:last-child { border-right: none; }
+#options thead tr:last-child * { border-bottom: none; }
+#options thead tr:last-child *:first-child { border-left: none; }
+#options thead tr:last-child *:last-child { border-right: none; }
+
+#input.error {
+    border-color: #C00;
+    color: #C00;
+}

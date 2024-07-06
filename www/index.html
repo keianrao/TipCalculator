@@ -28,6 +28,26 @@ copyright-->
         <title>Tip calculator</title>
     </head>
     <body>
-        <script src="js/index.js"></script>
+        <div id="titlebar"></div>
+        <section>
+            <label>
+                Subtotal:
+                <input id="subtotal" value="10" disabled />
+            </label>
+        </section>
+        <div class="table-wrapper">
+            <table id="options">
+                <thead>
+                    <th>Tip percentage</th>
+                    <th>Exact amount</th>
+                    <th>Rounded tip</th>
+                    <th>Rounded total</th>
+                </thead>
+            </table>
+        </div>
+        <section>
+            Final amount: <span id="final"></span>
+        </section>
     </body>
+    <script src="js/index.js"></script>
 </html>
