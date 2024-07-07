@@ -31,12 +31,12 @@ copyright-->
         <div id="titlebar"></div>
         <section>
             <label>
-                Subtotal:
+                Subtotal before sales tax:
                 <input id="subtotal" disabled />
             </label>
             <label>
-                Sales tax rate:
-                <input id="tax" disabled />
+                Sales tax rate (%):
+                <input id="rate" disabled />
             </label>
         </section>
         <div class="table-wrapper">
@@ -44,13 +44,16 @@ copyright-->
                 <thead>
                     <th>Tip percentage</th>
                     <th>Exact amount</th>
-                    <th>Rounded tip</th>
+                    <th>Rounded subtotal</th>
                     <th>Rounded total</th>
                 </thead>
             </table>
         </div>
         <section>
-            Final amount: <span id="final"></span>
+            Sales tax on subtotal: <span id="tax"></span><br />
+            Subtotal after sales tax: <span id="after"></span><br />
+            Tip to pay: <span id="tip"></span><br />
+            Grand total: <span id="total"></span>
         </section>
     </body>
     <script src="js/index.js"></script>

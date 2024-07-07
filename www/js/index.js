@@ -16,23 +16,11 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 copyright*/
 
-var titlebar, subtotal, tax, options, final;
+var titlebar, subtotal, rate, options, tax, after, tip, total;
+var selected;
 
 //  ---%-@-%---
 
-function getSubtotal()
-{
-    let value = subtotal.value;
-    
-    if (value.startsWith("$")) value = value.substring(1);
-    if (value.startsWith("€")) value = value.substring(1);
-    if (value.startsWith("£")) value = value.substring(1);
-    // Let the Europeans have their fun here. Everyone else,
-    // type solely numbers.
-
-    value = Number(value);
-    return value;
-}
 
 function validateSubtotal()
 {
@@ -43,64 +31,107 @@ function validateSubtotal()
     * form), and it kinda seems like new functionality, so I
     * won't be using it.
     */
-    return inputValidate(subtotal, getSubtotal);
-}
 
-function getSalesTax()
-{
-    return getMultiplier(tax.value);
+    let value = subtotal.value;
+    value = withoutPrefix(value, "$");
+    value = withoutPrefix(value, "€");
+    value = withoutPrefix(value, "£");
+    // Let the Europeans have their fun here. Everyone else,
+    // type solely numbers.
+    value = Number(value);
+
+    let valid = !Number.isNaN(value);
+    if (!valid) subtotal.setAttribute("class", "error");
+    else subtotal.removeAttribute("class");
+
+    subtotal.value = value;
+    return valid;
 }
 
 function validateSalesTax()
 {
-    return inputValidate(tax, getSalesTax);
+    let value = rate.value;
+    value = withoutSuffix(value, "%");
+    value = Number(value);
+
+    let valid = !Number.isNaN(value);
+    if (!valid) rate.setAttribute("class", "error");
+    else rate.removeAttribute("class");
+
+    rate.value = value;
+    return valid;
+}
+
+function getValidatedSubtotal()
+{
+    return Number(subtotal.value);
+}
+
+function getValidatedSalesTax()
+{
+    return getMultiplier(rate.value);
 }
 
 function recalculate()
 {
-    let valid = validateSubtotal();
-    
     function nextInt(number)
     {
         return Math.floor(number + 1);
     }
-    function fillCell(cell, value, clarification)
+    function intoCell(cell, value)
     {
-        if (clarification == null)
-        {
-            cell.innerText = value.toFixed(2);
-            return;
-        }
-        let v1 = value.toFixed(2);
-        let v2 = clarification.toFixed(2);
-        cell.innerText = v1 + " (" + v2 + ")";
+        let a = cell.firstElementChild;
+        a.innerText = value.toFixed(2);
+    }
+    function fromCell(cell)
+    {
+        let a = cell.firstElementChild;
+        return Number(a.innerText);
     }
 
+    let valid = validateSubtotal() && validateSalesTax();
+    if (!valid)
+    {
+        for (let child of options.children)
+        {
+            if (child.tagName != "TR") continue;
+            child.children.item(1).innerText = "-";
+            child.children.item(2).innerText = "-";
+            child.children.item(3).innerText = "-";
+        }
+        after.innerText = "-";
+        tip.innerText = "-";
+        total.innerText = "-";
+        return;
+    }
+
+    let subtotal = getValidatedSubtotal();
+    let salesTax = getValidatedSalesTax();
+
+    let taxToPay = subtotal * salesTax;
+    let subtotalAfter = subtotal + taxToPay;
+    let tipToPay = selected ? fromCell(selected) : 0;
+    let grandTotal = subtotalAfter + tipToPay;
+    
+    tax.innerText = taxToPay.toFixed(2);
+    after.innerText = subtotalAfter.toFixed(2);
+    tip.innerText = tipToPay.toFixed(2);
+    total.innerText = grandTotal.toFixed(2);
+    
     for (let child of options.children)
     {
         if (child.tagName != "TR") continue;
 
-        if (!valid)
-        {
-            child.children.item(1).innerText = "-";
-            child.children.item(2).innerText = "-";
-            child.children.item(3).innerText = "-";
-            continue;
-        }
-
-        let percentageString = child.children.item(0).innerText;
-        let multiplier = getMultiplier(percentageString);
-        let subtotal = getSubtotal();
-        let salesTax = getSalesTax();
+        let multiplier = getMultiplier(child.children.item(0).innerText);
         
         let straightforward = subtotal * multiplier;
+        intoCell(child.children.item(1), straightforward);
+        
         let rounded = nextInt(subtotal + straightforward) - subtotal;
-        let r2 = (subtotal + straightforward) * (1 + salesTax);
-        let roundedFinal = nextInt(r2) - subtotal;
-
-        fillCell(child.children.item(1), straightforward, null);
-        fillCell(child.children.item(2), rounded, null);
-        fillCell(child.children.item(3), roundedFinal, r2);
+        intoCell(child.children.item(2), rounded);
+        
+        let roundedTotal = nextInt(subtotal + straightforward + taxToPay) - subtotalAfter;
+        intoCell(child.children.item(3), roundedTotal);
     }
 }
 
@@ -112,21 +143,21 @@ function withoutSuffix(string, suffix)
     return string.substring(0, string.length - suffix.length);
 }
 
+function withoutPrefix(string, prefix)
+{
+    if (!string.startsWith(prefix)) return string;
+    return string.substring(prefix.length);
+}
+
 function getMultiplier(percentageString)
 {
     return Number(withoutSuffix(percentageString, "%")) / 100;
 }
 
-function inputValidate(inputElement, numberGetter)
+function selectCell(cell)
 {
-    let value = numberGetter();
-    let valid = !Number.isNaN(value);
-
-    if (!valid) inputElement.setAttribute("class", "error");
-    else inputElement.removeAttribute("class");
-    
-    inputElement.value = value;
-    return valid;
+    selected = cell;
+    recalculate();
 }
 
 //  ---%-@-%---
@@ -135,48 +166,66 @@ function main()
 {
     titlebar = document.getElementById("titlebar");
     subtotal = document.getElementById("subtotal");
-    tax = document.getElementById("tax");
+    rate = document.getElementById("rate");
     options = document.getElementById("options");
-    final = document.getElementById("final");
+    tax = document.getElementById("tax");
+    after = document.getElementById("after");
+    tip = document.getElementById("tip");
+    total = document.getElementById("total");
     
     populateOptions();
-
-    subtotal.value = 8.70;
-    subtotal.addEventListener("change", recalculate);
-    subtotal.removeAttribute("disabled");
-    tax.value = "13%";
-    tax.addEventListener("change", recalculate);
-    tax.removeAttribute("disabled");
+    setupInputs();
     recalculate();
-
 }
 
 function populateOptions()
 {
+    function selector(cell) {
+        let a = document.createElement("a");
+        a.innerText = "-";
+        a.setAttribute("href", "");
+        a.addEventListener("click", function(eM) {
+            selectCell(cell);
+            eM.preventDefault();
+        });
+        return a;
+    }
+
     for (let percentage = 0; percentage <= 200;)
     {
         let percentageCell = document.createElement("th");
         percentageCell.innerText = percentage + "%";
 
         let straightforwardCell = document.createElement("td");
-        straightforwardCell.innerText = "-";
-
-        let roundedCell = document.createElement("td");
-        roundedCell.innerText = "-";
+        straightforwardCell.appendChild(selector(straightforwardCell));
         
-        let roundedFinalCell = document.createElement("td");
-        roundedFinalCell.innerText = "-";
+        let roundedCell = document.createElement("td");
+        roundedCell.appendChild(selector(roundedCell));
+        
+        let roundedTotalCell = document.createElement("td");
+        roundedTotalCell.appendChild(selector(roundedTotalCell));
 
         let row = document.createElement("tr");
         row.appendChild(percentageCell);
         row.appendChild(straightforwardCell);
         row.appendChild(roundedCell);
-        row.appendChild(roundedFinalCell);
+        row.appendChild(roundedTotalCell);
         options.appendChild(row);
 
         if (percentage < 50) ++percentage;
         else percentage += 5;
     }
+}
+
+function setupInputs()
+{    
+    subtotal.value = 8.70;
+    subtotal.addEventListener("change", recalculate);
+    subtotal.removeAttribute("disabled");
+    
+    rate.value = "13%";
+    rate.addEventListener("change", recalculate);
+    rate.removeAttribute("disabled");
 }
 
 window.addEventListener("load",  main);

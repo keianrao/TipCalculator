@@ -17,7 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 copyright*/
 
 html {
-    background: cornsilk;
+    background-color: cornsilk;
 }
 
 
@@ -34,9 +34,15 @@ html {
     border: 0.05em solid grey;
     border-radius: 1em;
 }
-#options tr > th, #options tr > td {
+#options tr th, #options tr td {
     border-top: 0.05em solid grey;
     padding: 0.4em 0.6em;
+}
+#options > tr td.selected {
+    background-color: grey;   
+}
+#options > tr a:visited {
+    color: inherit;
 }
 #options thead tr:first-child * { border-top: none; }
 #options thead tr:first-child *:first-child { border-left: none; }
