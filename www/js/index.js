@@ -135,6 +135,17 @@ function recalculate()
     }
 }
 
+function selectCell(cell)
+{
+    if (selected) {
+        selected.removeAttribute("class");
+        selected = null;
+    }
+    selected = cell;
+    selected.setAttribute("class", "selected");
+    recalculate();
+}
+
 //   -  -%-  -
 
 function withoutSuffix(string, suffix)
@@ -151,18 +162,8 @@ function withoutPrefix(string, prefix)
 
 function getMultiplier(percentageString)
 {
+    if (percentageString == "") return Number.NaN;
     return Number(withoutSuffix(percentageString, "%")) / 100;
-}
-
-function selectCell(cell)
-{
-    if (selected) {
-        selected.removeAttribute("class");
-        selected = null;
-    }
-    selected = cell;
-    selected.setAttribute("class", "selected");
-    recalculate();
 }
 
 //  ---%-@-%---
@@ -170,6 +171,7 @@ function selectCell(cell)
 function main()
 {
     titlebar = document.getElementById("titlebar");
+    if (!titlebar) return;
     subtotal = document.getElementById("subtotal");
     rate = document.getElementById("rate");
     options = document.getElementById("options");

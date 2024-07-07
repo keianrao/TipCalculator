@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <meta charset="utf-8" />
+
+    <body>
+        <p id="t1">☐ withoutSuffix</p>
+        <p id="t2">☐ withoutPrefix</p>
+        <p id="t3">☐ getMultiplier</p>
+    </body>
+
+    <script src="../js/index.js"></script>
+    <script>
+        function set(id, state)
+        {
+            let p = document.getElementById(id);
+            let check = "☐ ";
+            if (state == true) check = "✓ ";
+            if (state == false) check = "✗ ";
+            p.innerText = check + p.innerText.substring(2);
+        }
+        function close(float1, float2)
+        {
+            return Math.abs(float2 - float1) < 0.01;
+        }
+    </script>
+    <script>
+        let ok = true;
+
+        let v1 = withoutSuffix("fish%", "%");
+        ok &= v1 == "fish";
+
+        let v2 = withoutSuffix("fiscal", "%");
+        ok &= v2 == "fiscal";
+
+        let v3 = withoutSuffix("", "%");
+        ok &= v3 == "";
+
+        let v4 = withoutSuffix("Orchestra", "");
+        ok &= v4 == "Orchestra";
+
+        let v5 = withoutSuffix("mistral", "al");
+        ok &= v5 == "mistr";
+
+        let v6 = withoutSuffix("Star$$", "$");
+        ok &= v6 == "Star$";
+
+        set("t1", ok);
+    </script>
+    <script>
+        ok = true;
+
+        v1 = withoutPrefix("MailInbox", "Mail");
+        ok &= v1 == "Inbox";
+
+        v2 = withoutPrefix("Serenity", "$");
+        ok &= v2 == "Serenity";
+
+        v3 = withoutPrefix("", "S");
+        ok &= v3 == "";
+
+        v4 = withoutPrefix("Sufficient", "");
+        ok &= v4 == "Sufficient";
+
+        v5 = withoutPrefix("mystery", "my");
+        ok &= v5 == "stery";
+
+        v6 = withoutPrefix("FoxFoxconn", "Fox");
+        ok &= v6 == "Foxconn";
+
+        set("t2", ok);
+    </script>
+    <script>
+        ok = true;
+
+        v1 = getMultiplier("65%");
+        ok &= v1 == 0.65;
+
+        v2 = getMultiplier("36");
+        ok &= v2 == 0.36;
+
+        v3 = getMultiplier("23.2");
+        ok &= close(v3, 0.232);
+
+        v4 = getMultiplier("four");
+        ok &= Number.isNaN(v4);
+        
+        v5 = getMultiplier("");
+        ok &= Number.isNaN(v5);
+
+        set("t3", ok);
+    </script>
+</html>

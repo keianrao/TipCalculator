@@ -1,15 +1,11 @@
 {
   "name": "com.keianrao.tipcalculator",
   "displayName": "TipCalculator",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Page for calculating dollar-rounded tips in a bill",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "ecosystem:cordova"
-  ],
+  "scripts": {},
+  "keywords": [ "ecosystem:cordova" ],
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
   "devDependencies": {
