@@ -28,33 +28,40 @@ copyright-->
         <title>Tip calculator</title>
     </head>
     <body>
-        <div id="titlebar"></div>
-        <section>
-            <label>
-                Subtotal before sales tax:
-                <input id="subtotal" disabled />
-            </label>
-            <label>
-                Sales tax rate (%):
-                <input id="rate" disabled />
-            </label>
-        </section>
-        <div class="table-wrapper">
-            <table id="options">
-                <thead>
-                    <th>Tip percentage</th>
-                    <th>Exact amount</th>
-                    <th>Rounded subtotal</th>
-                    <th>Rounded total</th>
-                </thead>
-            </table>
+        <div id="titlebar">
+            <h3>Tip calculator</h3>
         </div>
-        <section>
-            Sales tax on subtotal: <span id="tax"></span><br />
-            Subtotal after sales tax: <span id="after"></span><br />
-            Tip to pay: <span id="tip"></span><br />
-            Grand total: <span id="total"></span>
-        </section>
+        <main>
+            <section>
+                <label>
+                    Subtotal before sales tax:
+                    <br class="mobile" />
+                    <input id="subtotal" disabled />
+                </label>
+                <br class="mobile" />
+                <label>
+                    Sales tax rate (%):
+                    <br class="mobile" />
+                    <input id="rate" disabled />
+                </label>
+            </section>
+            <div class="table-wrapper">
+                <table id="options">
+                    <thead>
+                        <th>Tip percentage</th>
+                        <th>Exact amount</th>
+                        <th>Rounded subtotal</th>
+                        <th>Rounded total</th>
+                    </thead>
+                </table>
+            </div>
+            <section>
+                Sales tax on subtotal: <span id="tax"></span><br />
+                Subtotal after sales tax: <span id="after"></span><br />
+                Tip to pay: <span id="tip"></span><br />
+                Grand total: <span id="total"></span>
+            </section>
+        </main>
     </body>
     <script src="js/index.js"></script>
 </html>

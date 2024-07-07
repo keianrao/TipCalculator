@@ -19,17 +19,39 @@ copyright*/
 html {
     background-color: cornsilk;
 }
+body {
+    margin: 0;
+}
 
+#titlebar {
+    margin-bottom: 1em;
+    padding: 0.5em;
+
+    background-color: cornflowerblue;
+    background: linear-gradient(#94B5FF, cornflowerblue);
+    border-bottom: 0.1em solid #0003;
+
+    color: whitesmoke;
+    text-shadow: #0008 1px 1px;
+}
+#titlebar h3 {
+    margin: 0;
+}
+
+main {
+    margin: 1em;
+}
 
 .table-wrapper {
     display: inline-block;
     max-height: 70vh;
     overflow-y: scroll;
 }
+
 #options {
     table-layout: fixed;
     margin: 0.4em 0;
-    max-width: 40em;
+    max-width: min(100vw, 40em);
     
     border-spacing: 0;
     border: 0.05em solid grey;
@@ -46,15 +68,32 @@ html {
 #options > tr a:visited {
     color: inherit;
 }
-#options thead {
+
+#options thead tr th {
     background-color: #0001;
+    border-top: none;
 }
 #options thead tr th:nth-child(2) { width: 27%; }
 #options thead tr th:nth-child(3) { width: 27%; }
 #options thead tr th:nth-child(4) { width: 27%; }
-#options thead tr * { border-top: none; }
+#options thead tr th:first-child { border-top-left-radius: 1em; }
+#options thead tr th:last-child { border-top-right-radius: 1em; }
 
 input.error {
     color: #C00;
-    background: #FFCC80;
+    background-color: #FFCC80;
+}
+
+br.mobile { display: none; }
+
+@media (max-width: 40em) {
+    /*
+    * 40em is a weirdly emperical constant, and still allows for
+    * wonkiness in certain screen sizes. Having a determined
+    * width for the input fields in the top of the page would
+    * be better, then we can target the media query on that.
+    */
+    body section:first-of-type {
+        br.mobile { display: unset; }
+    }
 }
