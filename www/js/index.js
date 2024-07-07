@@ -74,9 +74,9 @@ function getValidatedSalesTax()
 
 function recalculate()
 {
-    function nextInt(number)
+    function roundUp(number)
     {
-        return Math.floor(number + 1);
+        return Math.ceil(number / 0.5) * 0.5;
     }
     function intoCell(cell, value)
     {
@@ -127,10 +127,10 @@ function recalculate()
         let straightforward = subtotal * multiplier;
         intoCell(child.children.item(1), straightforward);
         
-        let rounded = nextInt(subtotal + straightforward) - subtotal;
+        let rounded = roundUp(subtotal + straightforward) - subtotal;
         intoCell(child.children.item(2), rounded);
         
-        let roundedTotal = nextInt(subtotal + straightforward + taxToPay) - subtotalAfter;
+        let roundedTotal = roundUp(subtotal + straightforward + taxToPay) - subtotalAfter;
         intoCell(child.children.item(3), roundedTotal);
     }
 }
