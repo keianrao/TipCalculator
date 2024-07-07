@@ -45,7 +45,7 @@ html {
 #options thead tr:last-child *:first-child { border-left: none; }
 #options thead tr:last-child *:last-child { border-right: none; }
 
-#input.error {
-    border-color: #C00;
+input.error {
     color: #C00;
+    background: #FFCC80;
 }
