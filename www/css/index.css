@@ -29,7 +29,8 @@ html {
 #options {
     table-layout: fixed;
     margin: 0.4em 0;
-
+    max-width: 40em;
+    
     border-spacing: 0;
     border: 0.05em solid grey;
     border-radius: 1em;
@@ -37,19 +38,21 @@ html {
 #options tr th, #options tr td {
     border-top: 0.05em solid grey;
     padding: 0.4em 0.6em;
+    text-align: center;
 }
 #options > tr td.selected {
-    background-color: grey;   
+    background-color: #0002;
 }
 #options > tr a:visited {
     color: inherit;
 }
-#options thead tr:first-child * { border-top: none; }
-#options thead tr:first-child *:first-child { border-left: none; }
-#options thead tr:first-child *:last-child { border-right: none; }
-#options thead tr:last-child * { border-bottom: none; }
-#options thead tr:last-child *:first-child { border-left: none; }
-#options thead tr:last-child *:last-child { border-right: none; }
+#options thead {
+    background-color: #0001;
+}
+#options thead tr th:nth-child(2) { width: 27%; }
+#options thead tr th:nth-child(3) { width: 27%; }
+#options thead tr th:nth-child(4) { width: 27%; }
+#options thead tr * { border-top: none; }
 
 input.error {
     color: #C00;

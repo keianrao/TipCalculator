@@ -1,7 +1,7 @@
 {
   "name": "com.keianrao.tipcalculator",
   "displayName": "TipCalculator",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Page for calculating dollar-rounded tips in a bill",
   "main": "index.js",
   "scripts": {

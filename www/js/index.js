@@ -156,7 +156,12 @@ function getMultiplier(percentageString)
 
 function selectCell(cell)
 {
+    if (selected) {
+        selected.removeAttribute("class");
+        selected = null;
+    }
     selected = cell;
+    selected.setAttribute("class", "selected");
     recalculate();
 }
 
@@ -184,7 +189,7 @@ function populateOptions()
         let a = document.createElement("a");
         a.innerText = "-";
         a.setAttribute("href", "");
-        a.addEventListener("click", function(eM) {
+        cell.addEventListener("click", function(eM) {
             selectCell(cell);
             eM.preventDefault();
         });
